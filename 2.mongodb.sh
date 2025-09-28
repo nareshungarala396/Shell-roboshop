@@ -14,17 +14,17 @@ mkdir -p $LOGS_FOLDER
 echo "script exicution started:: $(date)" | tee -a $LOG_FILE
 
 if [ $USERID -ne 0 ]; then 
-    echo "ERROR : $R use root user privilages $N"
+    echo -e "ERROR : $R use root user privilages $N"
     exit 1
 fi
 
 VALIDATE(){
 
     if [ $1 -ne 0 ]; then 
-        echo "$2 has been $R failed $N" | tee -a $LOG_FILE
+        echo -e "$2 has been $R failed $N" | tee -a $LOG_FILE
         exit 1
     else
-        echo "$2 is $G successful $N" | tee -a $LOG_FILE
+        echo -e "$2 is $G successful $N" | tee -a $LOG_FILE
     fi
 }
 
