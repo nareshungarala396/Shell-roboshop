@@ -7,7 +7,7 @@ Y="\e[33m"
 N="\e[0m"
 
 LOGS_FOLDER="/var/log/Shell-roboshop"
-SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
+SCRIPT_NAME=$( echo $0 | cut -d "." -f2 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
 mkdir -p $LOGS_FOLDER
