@@ -20,21 +20,23 @@ fi
 VALIDATE(){
     if [ $1 -ne 0 ]; then
         echo " $2 was failed" | tee -a $LOG_FILE
+        exit 1
     else
         echo "$2 was successful" | tee -a $LOG_FILE
     fi
+    
 }
 
-dnf module disable nodejs -y &>>>$LOG_FILE
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disable of nodejs"
-dnf module enable nodejs:20 -y &>>>$LOG_FILE
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "Enable of nodejs"
-dnf install nodejs -y &>>>$LOG_FILE
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Istallation of nodejs"
 
 
 id roboshop
-if [ $? -ne 0 ]; then &>>>$LOG_FILE
+if [ $? -ne 0 ]; then &>>$LOG_FILE
     echo -e "$G user was not created $N"
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
     VALIDATE $? "roboshop user"
@@ -49,14 +51,14 @@ curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
 VALIDATE $? "download user application"
 
 cd /app 
-rm -rf /app/* &>>>$LOG_FILE              #it will remove the code in app if we run the script multiple times
+rm -rf /app/* &>>$LOG_FILE              #it will remove the code in app if we run the script multiple times
 VALIDATE $? "rmoving of old code if exist"
 unzip /tmp/user.zip
-npm install &>>>$LOG_FILE
+npm install &>>$LOG_FILE
 cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
-systemctl daemon-reload &>>>$LOG_FILE
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Daemon-reload"
-systemctl enable user &>>>$LOG_FILE
+systemctl enable user &>>$LOG_FILE
 VALIDATE $? "enable user"
-systemctl start user &>>>$LOG_FILE
+systemctl start user &>>$LOG_FILE
 VALIDATE $? "user start"
