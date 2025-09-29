@@ -12,6 +12,8 @@ SCRIPT_DIR=$PWD
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 echo "script start time = $(date)"
 
+mkdir -p $LOGS_FOLDER
+
 if [ $USERID -ne 0 ]; then
     echo -e "ERROR:: please user must use $R Root privilages $N" 
     exit 1
