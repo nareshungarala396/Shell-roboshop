@@ -6,23 +6,23 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-LOGS_FOLDER=/var/log/Shell-roboshop  #all logs will come usder Shell-roboshop
-SCRIPT_NAME=$(echo $0 | cut -d "." -f2) # to get only user
+LOGS_FOLDER="/var/log/Shell-roboshop"  #all logs will come usder Shell-roboshop
+SCRIPT_NAME=$( echo $0 | cut -d "." -f2 ) # to get only user
 SCRIPT_DIR=$PWD
-LOG_FILE=$LOGS_FOLDER/$SCRIPT_NAME.log
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 echo "script start time = $(date)"
 
 if [ $USERID -ne 0 ]; then
-    echo -e "ERROR:: please user must use $R Root privilages $N" | tee -a $LOG_FILE
+    echo -e "ERROR:: please user must use $R Root privilages $N" 
     exit 1
 fi
 
 VALIDATE(){
     if [ $1 -ne 0 ]; then
-        echo " $2 was failed" | tee -a $LOG_FILE
+        echo " $2 was failed" 
         exit 1
     else
-        echo "$2 was successful" | tee -a $LOG_FILE
+        echo "$2 was successful" 
     fi
     
 }
