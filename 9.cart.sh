@@ -27,6 +27,13 @@ VALIDATE(){
     
 }
 
+dnf module disable nodejs -y &>>$LOG_FILE
+VALIDATE $? "Disabling NodeJS"
+dnf module enable nodejs:20 -y  &>>$LOG_FILE
+VALIDATE $? "Enabling NodeJS 20"
+dnf install nodejs -y &>>$LOG_FILE
+VALIDATE $? "Installing NodeJS"
+
 id roboshop
 if [ $? -ne 0 ]; then &>>$LOG_FILE
     echo -e "$G user was not created $N"
@@ -39,21 +46,23 @@ fi
 mkdir -p /app 
 VALIDATE $? "app directory"
 
-curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$LOG_FILE
+curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$LOG_FILE
+VALIDATE $? "Downloading cart application"
+
 cd /app 
 rm -rf /app/* &>>$LOG_FILE
 
 unzip /tmp/cart.zip
 
 npm install &>>$LOG_FILE
-cp $SCRIPT_DIR/cart.service vim /etc/systemd/system/cart.service
+cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service
 
 systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "daemon-reload"
 
-systemctl enable user &>>$LOG_FILE
-VALIDATE $? "enable user 
-systemctl start user &>>$LOG_FILE
-VALIDATE $? "user start"
+systemctl enable catr &>>$LOG_FILE
+VALIDATE $? "enable cart"
+systemctl restart cart &>>$LOG_FILE
+
 
 
