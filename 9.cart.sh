@@ -1,30 +1,32 @@
+#!/bin/bash
+
 USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-LOGS_FOLDER="/var/log/Shell-roboshop"  #all logs will come usder Shell-roboshop
-SCRIPT_NAME=$( echo $0 | cut -d "." -f2 ) # to get only cart
+LOGS_FOLDER="/var/log/Shell-roboshop"
+SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-echo "script start time = $(date)"
+MONGODB_HOST=mongodb.nareshplace.fun
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-script/16-logs.log
 
 mkdir -p $LOGS_FOLDER
+echo "Script started executed at: $(date)" | tee -a $LOG_FILE
 
 if [ $USERID -ne 0 ]; then
-    echo -e "ERROR:: please user must use $R Root privilages $N" 
-    exit 1
+    echo "ERROR:: Please run this script with root privelege"
+    exit 1 # failure is other than 0
 fi
 
-VALIDATE(){
+VALIDATE(){ # functions receive inputs through args just like shell script args
     if [ $1 -ne 0 ]; then
-        echo " $2 was failed" 
+        echo -e "$2 ... $R FAILURE $N" | tee -a $LOG_FILE
         exit 1
     else
-        echo "$2 was successful" 
+        echo -e "$2 ... $G SUCCESS $N" | tee -a $LOG_FILE
     fi
-    
 }
 
 ##### NodeJS ####
@@ -70,4 +72,3 @@ VALIDATE $? "Enable cart"
 
 systemctl restart cart
 VALIDATE $? "Restarted cart"
-
